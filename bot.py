@@ -5,6 +5,7 @@ import pyautogui
 BLITZ_COLOR = (0,226,88)
 WITHDRAW_COLOR = (0,199,77)
 CAPTCHA_COLOR = (249,249,249)
+RED_COLOR = (222,76,65)
 
 #POSITIONS
 px_blitz_1 = (460,654)
@@ -14,6 +15,9 @@ px_blitz_4 = (1015,654)
 px_blitz_5 = (1200,654)
 px_blitz_6 = (1385,654)
 px_blitz_7 = (1570,654)
+waiting_pos = (880,760)
+trade_ok = (830,750)
+viewT = (830,800)
 
 WITHDRAW_POS = (1690,330)
 CAPTCHA_POS = (860,600)
@@ -37,7 +41,7 @@ def SolveCaptcha():
             pyautogui.click(CAPTCHA_POS_CLICK)
             break
         if elapsed_time > seconds:
-            main()
+            break
     main()
 
 
@@ -63,7 +67,6 @@ def StartWithdraw():
     SolveCaptcha()
 
 def main():
-
     while True:
         # SCREENSHOT
         im = pyautogui.screenshot()
@@ -110,5 +113,22 @@ def main():
             pyautogui.click(1570, 612)
             time.sleep(0.06)
             StartWithdraw()
+
+        waiting = im.getpixel(waiting_pos)
+        if waiting == WITHDRAW_COLOR:
+            pyautogui.click(waiting_pos)
+
+        trade_not_confirmed = im.getpixel(waiting_pos)
+        if trade_not_confirmed == RED_COLOR:
+            pyautogui.click(waiting_pos)
+
+        trade_was_ok = im.getpixel(trade_ok)
+        if trade_was_ok == WITHDRAW_COLOR:
+            pyautogui.click(trade_ok)
+
+        view = im.getpixel(viewT)
+        if view == WITHDRAW_COLOR:
+            pyautogui.click(700,800)
+
 print("Running...")
 main()
